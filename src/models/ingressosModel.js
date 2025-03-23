@@ -39,7 +39,7 @@ const deleteIngresso = async (id) => {
 const vendaIngresso = async (quantidade_disponivel, id) => {
     const idIngresso = await getIngressoById(id);
     const quantidadeCompra = 1; 
-    if (idIngresso.quantidade_disponivel >= quantidadeCompra) {
+    if (idIngresso >= quantidadeCompra) {
         const novaQuantidade = quantidade_disponivel = idIngresso - quantidadeCompra;
         const result = await pool.query("UPDATE ingressos SET quantidade_disponivel = $1 WHERE id = $2 RETURNING *", [novaQuantidade, id]);
         return result.rows[0];
