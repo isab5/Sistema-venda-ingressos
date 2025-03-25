@@ -55,7 +55,7 @@ const deleteIngresso = async (req, res) => {
 
 const vendaIngressos = async (req, res) => {
     try {
-        const { quantidade_disponivel } = req.body;
+        const { id, quantidade_compra } = req.body;
         if (!quantidade_disponivel) {
             return res.status(404).json({ error: "Não foi possível comprar ingresso!" });
         }

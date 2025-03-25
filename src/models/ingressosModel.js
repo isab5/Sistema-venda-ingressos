@@ -39,8 +39,9 @@ const deleteIngresso = async (id) => {
 
 const vendaIngressos = async (quantidade_disponivel, id) => {
     const idIngresso = await getIngressoById(id);
-    const quantidadeCompra = req.body; 
-    if (idIngresso.quantidade_disponivel === 0) {
+    const quantidade_compra = req.body; 
+    const quantidade_disponivel = await pool.query("SELECT quantidade_disponivel FROM ingressos WHERE id = $1", [id])
+    if (quantidade_disponivel >= quantidade_compra) {
         return {message: "Os ingressos estão esgotados"};
     }if (idIngresso >= quantidadeCompra) {
         const novaQuantidade = quantidade_disponivel = idIngresso - quantidadeCompra;
