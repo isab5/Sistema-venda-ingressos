@@ -10,18 +10,19 @@ const getIngressoById = async (id) => {
     return result.rows[0];
 };
 
-const createIngresso = async (evento, local, data_evento, categoria, preco, quantidade_disponível) => {
+const createIngresso = async (evento, local, data_evento, categoria, preco, quantidade_disponivel) => {
     const result = await pool.query(
-        "INSERT INTO users (evento, local, data_evento, categoria, preco, quantidade_disponível) VALUES ($1, $2) RETURNING *",
-        [evento, local, data_evento, categoria, preco, quantidade_disponível]
+        "INSERT INTO ingressos (evento, local, data_evento, categoria, preco, quantidade_disponivel) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+        [evento, local, data_evento, categoria, preco, quantidade_disponivel]
     );
     return result.rows[0];
 };
 
-const updateIngresso = async (id, evento, local, data_evento, categoria, preco, quantidade_disponível) => {
+
+const updateIngresso = async (id, evento, local, data_evento, categoria, preco, quantidade_disponivel) => {
     const result = await pool.query(
-        "UPDATE ingressos SET evento = $1, local = $2 data_evento = $3 categoria = $4 preco = $5 quantidade_disponivel = $6 WHERE id = $7 RETURNING *",
-        [evento, local, data_evento, categoria, preco, quantidade_disponível, id]
+        "UPDATE ingressos SET evento = $1, local = $2, data_evento = $3, categoria = $4, preco = $5, quantidade_disponivel = $6 WHERE id = $7 RETURNING *",
+        [evento, local, data_evento, categoria, preco, quantidade_disponivel, id]
     );
     return result.rows[0];
 };
@@ -36,19 +37,24 @@ const deleteIngresso = async (id) => {
     return { message: "Ingresso deletado com sucesso." };
 };
 
-const vendaIngresso = async (quantidade_disponivel, id) => {
+const vendaIngressos = async (quantidade_disponivel, id) => {
     const idIngresso = await getIngressoById(id);
-    const quantidadeCompra = 1; 
-    if (idIngresso >= quantidadeCompra) {
+    const quantidadeCompra = req.body; 
+    if (idIngresso.quantidade_disponivel === 0) {
+        return {message: "Os ingressos estão esgotados"};
+    }if (idIngresso >= quantidadeCompra) {
         const novaQuantidade = quantidade_disponivel = idIngresso - quantidadeCompra;
-        const result = await pool.query("UPDATE ingressos SET quantidade_disponivel = $1 WHERE id = $2 RETURNING *", [novaQuantidade, id]);
+        const result = await pool.query(
+            "UPDATE ingressos SET quantidade_disponivel = $1 WHERE id = $2 RETURNING *",
+            [novaQuantidade, id]
+        );
         return result.rows[0];
     } else {
-        return { message: "Não há essa quantidade de ingressos disponíveis" };
+        return { message: "Não há essa quantidade de ingressos disponíveis." };
     }
 };
 
-module.exports = { getAllIngressos, getIngressoById, createIngresso, updateIngresso, deleteIngresso, vendaIngresso };
+module.exports = { getAllIngressos, getIngressoById, createIngresso, updateIngresso, deleteIngresso, vendaIngressos };
 
 
 

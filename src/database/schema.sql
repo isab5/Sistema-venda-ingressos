@@ -9,10 +9,10 @@ CREATE TABLE ingressos (
     data_evento DATE NOT NULL,
     categoria VARCHAR(50) NOT NULL,
     preco DECIMAL(10,2) NOT NULL,
-    quantidade_disponível INTEGER NOT NULL
+    quantidade_disponivel INTEGER NOT NULL
 );
 
-INSERT INTO ingressos (evento, local, data_evento, categoria, preco, quantidade_disponível) VALUES 
+INSERT INTO ingressos (evento, local, data_evento, categoria, preco, quantidade_disponivel) VALUES 
     ('Show da Lana Del Rey', 'Allianz Parque', '2025-05-02', 'Pista', 180.00, 90),
     ('Show da Lana Del Rey', 'Allianz Parque', '2025-05-02', 'Pista VIP', 240.00, 50),
     ('Show da Lana Del Rey', 'Allianz Parque', '2025-05-02', 'Camarote', 400.00, 10),
