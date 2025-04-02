@@ -37,23 +37,13 @@ const deleteIngresso = async (id) => {
     return { message: "Ingresso deletado com sucesso." };
 };
 
-const vendaIngressos = async (quantidade_disponivel, id) => {
-    const idIngresso = await getIngressoById(id);
-    const quantidade_compra = req.body; 
-    const quantidade_utilizavel = await pool.query("SELECT quantidade_disponivel FROM ingressos WHERE id = $1", [id]);
-    if (quantidade_utilizavel >= quantidade_compra) {
-        return {message: "Os ingressos estão esgotados"};
-    }if (idIngresso >= quantidadeCompra) {
-        const novaQuantidade = quantidade_disponivel = idIngresso - quantidadeCompra;
-        const result = await pool.query(
-            "UPDATE ingressos SET quantidade_disponivel = $1 WHERE id = $2 RETURNING *",
-            [novaQuantidade, id]
-        );
-        return result.rows[0];
-    } else {
-        return { message: "Não há essa quantidade de ingressos disponíveis." };
-    }
+const vendaIngressos = async (id, quantidade) => {
+    const result = await pool.query(
+        "UPDATE ingressos SET quantidade_disponivel = $1 WHERE id = $2 RETURNING *", [quantidade, id]
+    );
+    return result.rows[0];
 };
+
 
 module.exports = { getAllIngressos, getIngressoById, createIngresso, updateIngresso, deleteIngresso, vendaIngressos };
 
